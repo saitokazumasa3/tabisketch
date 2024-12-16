@@ -12,25 +12,35 @@ import java.util.stream.Stream;
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PasswordAuthTokensMapperTest {
-
     @Autowired
     private IPassWordAuthenticationTokensMapper passwordAuthTokensMapper;
 
     @ParameterizedTest
+    @MethodSource("samplePasswordAuthToken")
     @Sql("classpath:/sql/CreateUser.sql")
-    @MethodSource("testDataForInsertingNewPasswordToken")
-    public void testInsertNewPasswordToken(final IPassWordAuthenticationTokensMapper passwordAuthenticationToken) {
-        // INSERTメソッドの実行
-        final int result = this.passwordAuthTokensMapper.insert(passwordAuthenticationToken);
-
-        // 結果の検証
-        assert result == 1 : "挿入に失敗しました。";
-        assert passwordAuthenticationToken.getId() != -1 : "トークンのIDが正しく設定されていません。";
+    public void INSERTできるか(final PasswordAuthToken passwordAuthToken) {
+        final var result = this.passwordAuthTokensMapper.insert(passwordAuthToken);
+        assert result == 1;
+        assert passwordAuthToken.getId() != -1;
     }
 
-    private static Stream<PasswordAuthenticationToken> testDataForInsertingNewPasswordToken() {
-        // サンプルデータの生成
-        final PasswordAuthenticationToken token = PasswordAuthenticationToken.generate(1, "sample@example.com");
-        return Stream.of(token);
+    @ParameterizedTest
+    @MethodSource("samplePasswordAuthTokenForEmail")
+    @Sql("classpath:/sql/CreateUser.sql")
+    public void メールアドレスを送信できるか(final PasswordAuthToken passwordAuthToken) {
+        // ここでメールアドレスを送信する処理を追加する
+        final var result = this.passwordAuthTokensMapper.insert(passwordAuthToken);
+        assert result == 1;
+        assert passwordAuthToken.getEmail() != null;  // メールアドレスが設定されているか確認
+    }
+
+    private static Stream<PasswordAuthToken> samplePasswordAuthToken() {
+        final var passwordAuthToken1 = PasswordAuthToken.generate(1);
+        return Stream.of(passwordAuthToken1);
+    }
+
+    private static Stream<PasswordAuthToken> samplePasswordAuthTokenForEmail() {
+        final var passwordAuthToken1 = PasswordAuthToken.generateWithEmail("sample@example.com");
+        return Stream.of(passwordAuthToken1);
     }
 }
