@@ -1,14 +1,11 @@
 package com.tabisketch.mapper;
 
 import com.tabisketch.bean.entity.User;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.stream.Stream;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -16,67 +13,35 @@ public class UsersMapperTest {
     @Autowired
     private IUsersMapper usersMapper;
 
-    @ParameterizedTest
-    @MethodSource("sampleMailAddress")
-    @Sql("classpath:/sql/CreateUser.sql")
-    public void SELECTできるか(final String mailAddress) {
-        final var user = this.usersMapper.selectByMailAddress(mailAddress);
-        assert user != null;
-    }
-
-    @ParameterizedTest
-    @MethodSource("sampleUser")
-    public void INSERTできるか(final User user) {
-        final var result = this.usersMapper.insert(user);
-        assert result == 1;
+    @Test
+    public void testInsert() {
+        final var user = User.generate(
+                "sample@example.com",
+                "$2a$10$FFbAunp0hfeWTCune.XqwO/P/61fqWlbruV/8wqzrhM3Pw0VuXxpa"
+        );
+        assert this.usersMapper.insert(user) == 1;
         assert user.getId() != -1;
     }
 
-    @ParameterizedTest
-    @MethodSource("sampleUpdateUser")
+    @Test
     @Sql("classpath:/sql/CreateUser.sql")
-    public void mailAddressをUPDATEできるか(final User user) {
-        final var result = this.usersMapper.updateMailAddress(user.getId(), user.getMailAddress());
-        assert result == 1;
+    public void testSelect() {
+        final int id = 1;
+        assert this.usersMapper.selectById(id) != null;
+
+        final String mailAddress = "sample@example.com";
+        assert this.usersMapper.selectByMailAddress(mailAddress) != null;
     }
 
-    @ParameterizedTest
-    @MethodSource("sampleId")
+    @Test
     @Sql("classpath:/sql/CreateUser.sql")
-    public void isMailAddressVerifiedをUPDATEできるか(final int id) {
-        final var result1 = this.usersMapper.updateMailAddressVerified(id, true);
-        final var result2 = this.usersMapper.updateMailAddressVerified(id, false);
-        assert result1 == 1;
-        assert result2 == 1;
-    }
-
-    @ParameterizedTest
-    @MethodSource("sampleMailAddress")
-    @Sql("classpath:/sql/CreateUser.sql")
-    public void isExistMailAddressが動作するか(final String mailAddress) {
-        final var result1 = this.usersMapper.isExistMailAddress(mailAddress);
-        final var result2 = this.usersMapper.isExistMailAddress(mailAddress + "aaa");
-        assert result1 == 1;
-        assert result2 == 0;
-    }
-
-    private static Stream<Integer> sampleId() {
-        final var id = 1;
-        return Stream.of(id);
-    }
-
-    private static Stream<String> sampleMailAddress() {
-        final var mailAddress = "sample@example.com";
-        return Stream.of(mailAddress);
-    }
-
-    private static Stream<User> sampleUser() {
-        final var user = User.generate("sample@example.com", "password");
-        return Stream.of(user);
-    }
-
-    private static Stream<User> sampleUpdateUser() {
-        final var user = new User (1, "sample2@example.com", "password", false);
-        return Stream.of(user);
+    public void testUpdate() {
+        final var user = new User(
+                1,
+                "sample2@example.com",
+                "$2a$10$FFbAunp0hfeWTCune.XqwO/P/61fqWlbruV/8wqzrhM3Pw0VuXxpa",
+                true
+        );
+        assert this.usersMapper.update(user) == 1;
     }
 }

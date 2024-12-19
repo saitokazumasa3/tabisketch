@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SendEditMailForm {
+public class EditMailAddressForm {
     @Email
     @NotBlank
     private String currentMailAddress;
@@ -19,7 +19,7 @@ public class SendEditMailForm {
     @NotBlank
     private String currentPassword;
 
-    public static SendEditMailForm empty() {
-        return new SendEditMailForm("", "", "");
+    public static EditMailAddressForm empty() {
+        return new EditMailAddressForm("", "", "");
     }
 }

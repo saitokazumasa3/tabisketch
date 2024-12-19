@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SendMailService implements ISendMailService {
     @Value("${spring.mail.username}")
-    private String formMailAddress;
+    private String fromMailAddress;
     private final JavaMailSender mailSender;
 
     public SendMailService(final JavaMailSender mailSender) {
@@ -25,7 +25,7 @@ public class SendMailService implements ISendMailService {
         final var message = this.mailSender.createMimeMessage();
         final var messageHelper = new MimeMessageHelper(message, true);
 
-        messageHelper.setFrom(this.formMailAddress);
+        messageHelper.setFrom(this.fromMailAddress);
         messageHelper.setTo(mail.getToMailAddress());
         messageHelper.setSubject(mail.getSubject());
         messageHelper.setText(mail.getContent());

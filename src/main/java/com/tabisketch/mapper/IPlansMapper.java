@@ -20,6 +20,11 @@ public interface IPlansMapper {
     @Select("SELECT * FROM plans WHERE user_id = #{userId}")
     List<Plan> selectByUserId(final int userId);
 
+    @Select("SELECT p.* FROM plans p " +
+            "   INNER JOIN users u ON p.user_id = u.id " +
+            "   WHERE u.mail_address = #{mailAddress}")
+    List<Plan> selectByMailAddress(final String mailAddress);
+
     @Select("SELECT * FROM plans WHERE uuid = #{uuid}")
     Plan selectByUUID(final UUID uuid);
 

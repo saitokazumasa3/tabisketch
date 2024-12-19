@@ -15,7 +15,7 @@ public class CreatePlanControllerTest {
 
     @Test
     @WithMockUser
-    public void getが動作するか() throws Exception {
+    public void testGet() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/plan/create"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("plan/create"));

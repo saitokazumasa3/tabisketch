@@ -13,7 +13,7 @@ body {
         @apply rounded bg-interactive text-white px-4 py-2 w-32 hover:bg-sub-button transition-colors;
     }
     .button-secondary {
-        @apply rounded bg-white outline outline-2 outline-interactive text-interactive px-4 py-2 w-32 hover:bg-frame transition-colors;
+        @apply rounded bg-white outline outline-2 outline-interactive text-interactive px-4 py-2 w-40 hover:bg-frame transition-colors;
     }
     .input {
         @apply rounded-lg bg-white border-2 border-frame p-2 focus:outline-none focus:border-label;

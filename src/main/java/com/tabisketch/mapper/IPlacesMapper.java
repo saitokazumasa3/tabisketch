@@ -28,6 +28,6 @@ public interface IPlacesMapper {
             "   USING days, plans " +
             "   WHERE places.day_id = days.id " +
             "   AND days.plan_id = plans.id " +
-            "   AND plans.uuid = #{uuid}")
-    int deleteByPlanUUID(final UUID uuid);
+            "   AND plans.uuid = #{planUUID}")
+    int deleteByPlanUUID(final UUID planUUID);
 }

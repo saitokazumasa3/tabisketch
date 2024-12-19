@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS mail_address_auth_tokens
+CREATE TABLE IF NOT EXISTS maa_tokens
 (
     id               SERIAL PRIMARY KEY,
     token            UUID UNIQUE NOT NULL DEFAULT GEN_RANDOM_UUID(),

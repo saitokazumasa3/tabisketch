@@ -1,9 +1,13 @@
 package com.tabisketch.service.implement;
 
-import com.tabisketch.bean.entity.MailAddressAuthToken;
-import com.tabisketch.mapper.IMailAddressAuthTokensMapper;
+import com.tabisketch.bean.entity.MAAToken;
+import com.tabisketch.bean.entity.User;
+import com.tabisketch.exception.DeleteFailedException;
+import com.tabisketch.exception.UpdateFailedException;
+import com.tabisketch.mapper.IMAATokensMapper;
 import com.tabisketch.mapper.IUsersMapper;
 import com.tabisketch.service.IAuthMailAddressService;
+import com.tabisketch.util.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,37 +15,43 @@ import java.util.UUID;
 
 @Service
 public class AuthMailAddressService implements IAuthMailAddressService {
-    private final IMailAddressAuthTokensMapper mailAddressAuthTokensMapper;
+    private final IMAATokensMapper maaTokensMapper;
     private final IUsersMapper usersMapper;
 
     public AuthMailAddressService(
-            final IMailAddressAuthTokensMapper mailAddressAuthTokensMapper,
+            final IMAATokensMapper maaTokensMapper,
             final IUsersMapper usersMapper
     ) {
-        this.mailAddressAuthTokensMapper = mailAddressAuthTokensMapper;
+        this.maaTokensMapper = maaTokensMapper;
         this.usersMapper = usersMapper;
     }
 
     @Override
     @Transactional
-    public boolean execute(final String token) {
-        final var tokenUUID = UUID.fromString(token);
-        final var mailAddressAuthToken = this.mailAddressAuthTokensMapper.selectByToken(tokenUUID);
+    public void execute(final String maaTokenStr) throws UpdateFailedException, DeleteFailedException {
+        final var token = UUID.fromString(maaTokenStr);
+        final MAAToken maaToken = this.maaTokensMapper.selectByToken(token);
+        final User user = this.usersMapper.selectById(maaToken.getUserId());
 
-        if (mailAddressAuthToken == null) return false;
+        // メールアドレスの更新があるかどうかで作るインスタンスを変える
+        final User newUser = StringUtils.isNotNullAndNotEmpty(maaToken.getNewMailAddress()) ?
+                new User(
+                        user.getId(),
+                        maaToken.getNewMailAddress(),
+                        user.getPassword(),
+                        true
+                ) :
+                new User(
+                        user.getId(),
+                        user.getMailAddress(),
+                        user.getPassword(),
+                        true
+                );
 
-        this.usersMapper.updateMailAddressVerified(mailAddressAuthToken.getUserId(), true);
+        final int updateResult = this.usersMapper.update(newUser);
+        final int deleteResult = this.maaTokensMapper.delete(maaToken.getId());
 
-        // メールアドレス編集の認証時はメールアドレスを更新
-        if (isNotEmptyNewMailAddress(mailAddressAuthToken))
-            this.usersMapper.updateMailAddress(mailAddressAuthToken.getUserId(), mailAddressAuthToken.getNewMailAddress());
-
-        this.mailAddressAuthTokensMapper.deleteById(mailAddressAuthToken.getId());
-        return true;
-    }
-
-    private boolean isNotEmptyNewMailAddress(final MailAddressAuthToken mailAddressAuthToken) {
-        return mailAddressAuthToken.getNewMailAddress() != null &&
-                !mailAddressAuthToken.getNewMailAddress().isEmpty();
+        if (updateResult != 1) throw new UpdateFailedException("Userの更新に失敗しました。");
+        if (deleteResult != 1) throw new DeleteFailedException("MAATokenの削除に失敗しました。");
     }
 }

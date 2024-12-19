@@ -1,5 +1,6 @@
 package com.tabisketch.service.implement;
 
+import com.tabisketch.exception.DeleteFailedException;
 import com.tabisketch.mapper.IDaysMapper;
 import com.tabisketch.mapper.IPlacesMapper;
 import com.tabisketch.mapper.IPlansMapper;
@@ -27,10 +28,14 @@ public class DeletePlanService implements IDeletePlanService {
 
     @Override
     @Transactional
-    public void execute(final String planUUID) {
+    public void execute(final String planUUID) throws DeleteFailedException {
         final var uuid = UUID.fromString(planUUID);
+
+        // NOTE: Place, Dayは0の場合があるため、結果の検証を行わない
         this.placesMapper.deleteByPlanUUID(uuid);
         this.daysMapper.deleteByPlanUUID(uuid);
-        this.plansMapper.deleteByUUID(uuid);
+        final int deleteResult = this.plansMapper.deleteByUUID(uuid);
+
+        if (deleteResult != 1) throw new DeleteFailedException("Planの削除に失敗しました。");
     }
 }

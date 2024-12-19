@@ -1,6 +1,7 @@
 package com.tabisketch.controller;
 
 import com.tabisketch.bean.form.RegisterForm;
+import com.tabisketch.exception.InsertFailedException;
 import com.tabisketch.service.IRegisterService;
 import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Controller;
@@ -32,14 +33,9 @@ public class RegisterController {
             final @Validated RegisterForm registerForm,
             final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes
-    ) throws MessagingException {
-        if (registerForm.isNotMatchPasswordAndRePassword())
-            // TODO: エラーメッセージ等、ベタ書きではなく別の場所から参照する形にする
-            bindingResult.rejectValue("rePassword", "error.registerForm", "パスワードが一致しません");
-
+    ) throws InsertFailedException, MessagingException {
         if (bindingResult.hasErrors()) return "register/index";
 
-        // TODO: 送信エラーが発生した時どうするか考える
         this.registerService.execute(registerForm);
 
         redirectAttributes.addFlashAttribute("mailAddress", registerForm.getMailAddress());

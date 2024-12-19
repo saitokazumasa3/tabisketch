@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MailAddressAuthToken {
+public class MAAToken {
     private int id;
     private UUID token;
     private String newMailAddress;
@@ -20,8 +20,8 @@ public class MailAddressAuthToken {
     /**
      * 新規登録時に使う
      */
-    public static MailAddressAuthToken generate(final int userId) {
-        return new MailAddressAuthToken(
+    public static MAAToken generate(final int userId) {
+        return new MAAToken(
                 -1,
                 UUID.randomUUID(),
                 "",
@@ -33,8 +33,8 @@ public class MailAddressAuthToken {
     /**
      * メール編集時に使う
      */
-    public static MailAddressAuthToken generate(final int userId, final String newMailAddress) {
-        return new MailAddressAuthToken(
+    public static MAAToken generate(final int userId, final String newMailAddress) {
+        return new MAAToken(
                 -1,
                 UUID.randomUUID(),
                 newMailAddress,

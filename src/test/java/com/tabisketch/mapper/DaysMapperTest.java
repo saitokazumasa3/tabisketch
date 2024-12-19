@@ -1,8 +1,7 @@
 package com.tabisketch.mapper;
 
 import com.tabisketch.bean.entity.Day;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,55 +16,43 @@ public class DaysMapperTest {
     @Autowired
     private IDaysMapper daysMapper;
 
-    @ParameterizedTest
-    @MethodSource("sampleDay")
+    @Test
     @Sql({
             "classpath:/sql/CreateUser.sql",
             "classpath:/sql/CreatePlan.sql",
     })
-    public void INSERTできるか(final Day day) {
-        final var result = this.daysMapper.insert(day);
-        assert result == 1;
+    public void testInsert() {
+        final var day = Day.generate(
+                -1,
+                1,
+                1,
+                "0000"
+        );
+        assert this.daysMapper.insert(day) == 1;
         assert day.getId() != -1;
     }
 
-    @ParameterizedTest
-    @MethodSource("samplePlanId")
+    @Test
     @Sql({
             "classpath:/sql/CreateUser.sql",
             "classpath:/sql/CreatePlan.sql",
             "classpath:/sql/CreateDay.sql",
     })
-    public void SELECTできるか(final int planId) {
+    public void testSelect() {
+        final int planId = 1;
         final var dayList = this.daysMapper.selectByPlanId(planId);
         assert dayList != null;
         assert !dayList.isEmpty();
     }
 
-    @ParameterizedTest
-    @MethodSource("samplePlanUUID")
+    @Test
     @Sql({
             "classpath:/sql/CreateUser.sql",
             "classpath:/sql/CreatePlan.sql",
             "classpath:/sql/CreateDay.sql",
     })
-    public void DELETEできるか(final UUID uuid) {
-        final var result = this.daysMapper.deleteByPlanUUID(uuid);
-        assert result == 1;
-    }
-
-    private static Stream<Day> sampleDay() {
-        final var day = Day.generate(1, 1, 0, "0000");
-        return Stream.of(day);
-    }
-
-    private static Stream<Integer> samplePlanId() {
-        final var planId = 1;
-        return Stream.of(planId);
-    }
-
-    private static Stream<UUID> samplePlanUUID() {
-        final var planUUID = UUID.fromString("611d4008-4c0d-4b45-bd1b-21c97e7df3b2");
-        return Stream.of(planUUID);
+    public void testDelete() {
+        final var uuid = UUID.fromString("611d4008-4c0d-4b45-bd1b-21c97e7df3b2");
+        assert this.daysMapper.deleteByPlanUUID(uuid) == 1;
     }
 }

@@ -9,15 +9,16 @@ public interface IUsersMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(final User user);
 
+    @Select("SELECT * FROM users WHERE id = #{id}")
+    User selectById(final int id);
+
     @Select("SELECT * FROM users WHERE mail_address = #{mailAddress}")
     User selectByMailAddress(final String mailAddress);
 
-    @Update("UPDATE users SET mail_address = #{mailAddress} WHERE id = #{id}")
-    int updateMailAddress(final int id, final String mailAddress);
-
-    @Update("UPDATE users SET is_mail_address_verified = #{isMailAddressVerified} WHERE id = #{id}")
-    int updateMailAddressVerified(final int id, final boolean isMailAddressVerified);
-
-    @Select("SELECT COUNT(*) FROM users WHERE mail_address = #{mailAddress}")
-    int isExistMailAddress(final String mailAddress);
+    @Update("UPDATE users " +
+            "   SET mail_address = #{mailAddress}, " +
+            "       password = #{password}, " +
+            "       is_mail_address_authenticated = #{isMailAddressAuthenticated} " +
+            "   WHERE id = #{id}")
+    int update(final User user);
 }

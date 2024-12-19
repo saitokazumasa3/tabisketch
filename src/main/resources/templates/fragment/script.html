@@ -6,12 +6,16 @@
 </head>
 <body>
 <th:block th:fragment="googleMapsAPI">
-    <!-- TODO:callbackが2つになったため、modalのautoCompleteが動かないので動くように修正する必要あり-->
     <script
-        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${googleMapsApiKey} + '&callback=initializeMaps&libraries=places&v=weekly'"
+        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${googleMapsApiKey} + '&callback=initialize&libraries=places&v=weekly'"
         async
         defer
-    >
+    ></script>
+    <script>
+        function initialize() {
+            initAutoComplete();
+            initializeMaps();
+        }
     </script>
 </th:block>
 
@@ -24,7 +28,7 @@
 </th:block>
 
 <th:block th:fragment="check">
-    <script src="/js/checkSession.js"></script>
+    <script src="/js/check.js"></script>
 </th:block>
 
 <th:block th:fragment="map">
@@ -43,5 +47,9 @@
 <th:block th:fragment="svgRadioButton">
     <script src="/js/svgRadioButton.js"></script>
 </th:block>
+
+<th:blocl th:fragment="redirect">
+    <script src="/js/redirect.js"></script>
+</th:blocl>
 </body>
 </html>

@@ -56,14 +56,17 @@
                 <div class="flex flex-col mt-6 mb-10">
                     <div class="mb-6">
                         <p class="mb-2 sm:text-lg text-base">出発地点</p>
-                        <!--TODO: 出発地点を表示するmodalを挿入-->
+                        <th:block th:replace="~{fragment/detail-place :: start(${startPlace})}" />
                     </div>
                     <div class="mb-6">
-                        <!--TODO: 経路を表示するmodalを挿入-->
+                        <p class="mb-2 sm:text-lg text-base">目的地</p>
+                        <div th:each="place : ${placeList}">
+                            <th:block th:replace="~{fragment/detail-place :: places(${place})}" />
+                        </div>
                     </div>
                     <div class="mb-6">
                         <p class="mb-2 sm:text-lg text-base">終了地点</p>
-                        <!--TODO: 終了地点を表示するmodalを挿入-->
+                        <th:block th:replace="~{fragment/detail-place :: end(${endPlace})}" />
                     </div>
                 </div>
                 <div class="flex justify-center mb-20">

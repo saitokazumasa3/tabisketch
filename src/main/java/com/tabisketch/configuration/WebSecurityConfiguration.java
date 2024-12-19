@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +27,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/plan/**").authenticated()
                         .anyRequest().denyAll()
                 ).formLogin(a -> a
-                        .loginPage("/login/**")
+                        .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/plan/list")
                         .failureUrl("/login?error")
@@ -34,6 +35,8 @@ public class WebSecurityConfiguration {
                         .usernameParameter("mailAddress")
                         .permitAll()
                 ).logout(a -> a
+                        .logoutUrl("/logout/**")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login")
                         .permitAll()
                 ).build();

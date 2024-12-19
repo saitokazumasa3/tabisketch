@@ -5,8 +5,8 @@ import com.tabisketch.service.IListPlanService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.when;
 public class ListPlanControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @MockitoBean
     private IListPlanService listPlanService;
 
     @Test
-    @WithMockUser(username = "sample@example.com")
-    public void getが動作するか() throws Exception {
-        when(listPlanService.execute(any())).thenReturn(new ArrayList<>());
+    @WithMockUser
+    public void testGet() throws Exception {
+        when(this.listPlanService.execute(any())).thenReturn(new ArrayList<>());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/plan/list"))
                 .andExpect(MockMvcResultMatchers.status().isOk())

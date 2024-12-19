@@ -15,7 +15,7 @@ public class IndexControllerTest {
 
     @Test
     @WithMockUser
-    public void getが動作するか() throws Exception {
+    public void testGet() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/top"));

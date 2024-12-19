@@ -1,10 +1,10 @@
 package com.tabisketch.controller;
 
+import com.tabisketch.exception.DeleteFailedException;
 import com.tabisketch.service.IDeletePlanService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -17,7 +17,7 @@ public class DeletePlanController {
     }
 
     @DeleteMapping
-    public String post(final @PathVariable String uuid) {
+    public String post(final @PathVariable String uuid) throws DeleteFailedException {
         this.deletePlanService.execute(uuid);
         return "redirect:/plan/list";
     }
