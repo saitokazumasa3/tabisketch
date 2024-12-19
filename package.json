@@ -4,6 +4,9 @@
   "description": "- Java JDK 22.0.2\r - PostgreSQL 17",
   "main": "index.js",
   "scripts": {
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up",
+    "docker:down": "docker compose down",
     "lint": "eslint src/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
