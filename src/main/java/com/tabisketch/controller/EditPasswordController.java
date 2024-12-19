@@ -1,6 +1,7 @@
 package com.tabisketch.controller;
 
 import com.tabisketch.service.IEditPasswordService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class EditPasswordController {
             return "user/edit/password";
         }
 
-        boolean isPasswordUpdated = editPasswordService.editPassword("sample@example.com", password);
-        if (isPasswordUpdated) {
+        boolean PasswordUpdated = editPasswordService.editPassword("sample@example.com", password);
+        if (PasswordUpdated) {
             return "redirect:/user/login";
         } else {
             return "user/edit/password";
