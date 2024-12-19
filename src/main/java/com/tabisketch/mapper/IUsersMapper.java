@@ -15,6 +15,10 @@ public interface IUsersMapper {
     @Select("SELECT * FROM users WHERE mail_address = #{mailAddress}")
     User selectByMailAddress(final String mailAddress);
 
+    //TODO パスワード編集のための処理。別なMapperに書いたほういいならそうする
+    @Update("UPDATE users SET password = #{password} WHERE mail_address = #{mailAddress}")
+    int updatePassword(final String mailAddress, final String password);
+
     @Update("UPDATE users " +
             "   SET mail_address = #{mailAddress}, " +
             "       password = #{password}, " +
