@@ -32,29 +32,29 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 sm:p-5">
-                        <form class="space-y-4 w-full" id="startPlaceForm">
+                        <div class="space-y-4 w-full">
                             <div>
-                                <label class="block mb-2" for="startPlace">出発地点<span class="ml-2 text-sm text-danger">必須</span></label>
-                                <input class="w-full input focus:ring-0" id="startPlace" name="startPlace" required type="text"/>
+                                <label class="block mb-2" th:for="${startForm.startPlace}">出発地点<span class="ml-2 text-sm text-danger">必須</span></label>
+                                <input class="w-full input focus:ring-0" th:field="${startForm.startPlace}" required type="text"/>
                             </div>
-                            <input class="hidden" id="startPlaceId" name="startPlaceId" required type="text"/>
-                            <input class="hidden" id="startLat" name="startLat" required type="text"/>
-                            <input class="hidden" id="startLng" name="startLng" required type="text"/>
+                            <input class="hidden" th:field="${startForm.startPlaceId}" required type="text"/>
+                            <input class="hidden" th:field="${startForm.startLan}" required type="text"/>
+                            <input class="hidden" th:field="${startForm.startLng}" required type="text"/>
                             <div class="w-1/2">
-                                <label class="block mb-2" for="startTime">予定時間<span class="ml-2 text-sm text-danger">必須</span></label>
+                                <label class="block mb-2" th:for="${startForm.startTime}">予定時間<span class="ml-2 text-sm text-danger">必須</span></label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path clip-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" fill-rule="evenodd"/>
                                         </svg>
                                     </div>
-                                    <input class="w-full input focus:ring-0" id="startTime" max="24:00" min="00:00" placeholder="--:--" required type="time"/>
+                                    <input class="w-full input focus:ring-0" th:field="${startForm.startTime}" max="24:00" min="00:00" placeholder="--:--" required type="time"/>
                                 </div>
                             </div>
                             <div class="flex justify-center">
-                                <button class="button-primary" type="submit">登録</button>
+                                <button class="button-primary" type="button" id="startPlaceSubmit">登録</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,18 +87,18 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 sm:p-5">
-                        <form class="space-y-4 w-full" id="endPlaceForm">
+                        <div class="space-y-4 w-full">
                             <div>
-                                <label class="block mb-2" for="endPlace">終了地点<span class="ml-2 text-sm text-danger">必須</span></label>
+                                <label class="block mb-2" th:for="${endForm.endPlace}">終了地点<span class="ml-2 text-sm text-danger">必須</span></label>
                                 <input class="w-full input focus:ring-0" id="endPlace" name="endPlace" required type="text"/>
                             </div>
-                            <input class="hidden" id="endPlaceId" name="endPlaceId" required type="text"/>
-                            <input class="hidden" id="endLat" name="endLat" required type="text"/>
-                            <input class="hidden" id="endLng" name="endLng" required type="text"/>
+                            <input class="hidden" th:field="${endForm.endPlaceId}" required type="text"/>
+                            <input class="hidden" th:field="${endForm.endLat}" required type="text"/>
+                            <input class="hidden" th:field="${endForm.endLng}" required type="text"/>
                             <div class="flex justify-center">
-                                <button class="button-primary" type="submit">登録</button>
+                                <button class="button-primary" type="button" id="endPlaceSubmit">登録</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 sm:p-5">
-                        <form class="space-y-4 w-full" th:id="'placeForm' + ${num}">
+                        <div class="space-y-4 w-full">
                             <input class="hidden" required th:id="'placeId' + ${num}" th:name="'placeId' + ${num}" type="text"/>
                             <input class="hidden" required th:id="'placeLat' + ${num}" th:name="'placeLat' + ${num}" type="text"/>
                             <input class="hidden" required th:id="'placeLng' + ${num}" th:name="'placeLng' + ${num}" type="text"/>
@@ -191,9 +191,9 @@
                                 </div>
                             </div>
                             <div class="flex justify-center">
-                                <button class="button-primary" th:id="'placesSubmit' + ${num}" type="submit">追加</button>
+                                <button class="button-primary" th:id="'placesSubmit' + ${num}" type="button">追加</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

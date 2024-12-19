@@ -367,25 +367,25 @@ class ModalElement {
     }
 }
 
-class ModalForm {
-    #startFormElement;
-    #placeFormElements = [];
-    #endFormElement;
+class ModalSubmitButton {
+    #startBtnElement;
+    #placeBtnElement = [];
+    #endBtnElement;
 
     constructor() {
-        this.#startFormElement = document.getElementById('startPlaceForm');
+        this.#startBtnElement = document.getElementById('startPlaceSubmit');
         for (let i = 1; i <= placeNum.value(); i++) {
-            this.#placeFormElements.push(document.getElementById(`placeForm${i}`));
+            this.#placeBtnElement.push(document.getElementById(`placesSubmit${i}`));
         }
-        this.#endFormElement = document.getElementById('endPlaceForm');
+        this.#endBtnElement = document.getElementById('endPlaceSubmit');
         this.initFormEvent();
     }
 
     initFormEvent() {
-        if (!this.#startFormElement || !this.#placeFormElements || !this.#endFormElement) return;
-        this.#startFormElement.addEventListener('submit', (e) => this.#startFormSubmit(e) );
-        this.#endFormElement.addEventListener('submit', (e) => this.#endFormSubmit(e) );
-        this.#placeFormElements.forEach((element) => element.addEventListener('submit', async(e) => await this.#placesFormSubmit(e)));
+        if (!this.#startBtnElement || !this.#placeBtnElement || !this.#endBtnElement) return;
+        this.#startBtnElement.addEventListener('click', (e) => this.#startFormSubmit(e) );
+        this.#endBtnElement.addEventListener('click', (e) => this.#endFormSubmit(e) );
+        this.#placeBtnElement.forEach((element) => element.addEventListener('click', async(e) => await this.#placesFormSubmit(e)));
     }
 
     /**
@@ -429,7 +429,7 @@ class ModalForm {
         e.preventDefault();
 
         const formId = e.target.id; // formのid取得
-        const formNum = Number(formId.replace('placeForm', '')); // placeForm${num}の数字だけ取得
+        const formNum = Number(formId.replace('placesSubmit', '')); // placesSubmit{num}の数字だけ取得
 
         sessionStorageList.setPlaces(formNum);
 
@@ -458,7 +458,7 @@ class ModalForm {
         placeNum.increment();
         modal.addPlacesElement();
         modal.addButtonEvent('places', placeNum.value()-1); // 新しいModalにイベント追加
-        new ModalForm(); // modalFormイベントをアタッチ
+        new ModalSubmitButton(); // modalFormイベントをアタッチ
     }
 }
 
@@ -578,7 +578,7 @@ const modal = new ModalElement();
 async function initModal() {
     const initializeDisplay = new InitSessionModals();
     await initializeDisplay.initialize();
-    new ModalForm();
+    new ModalSubmitButton();
 }
 
 initModal();
