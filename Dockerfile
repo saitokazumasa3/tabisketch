@@ -6,6 +6,7 @@ COPY tailwind.config.js .
 COPY package.json .
 COPY package-lock.json .
 # TailwindCSSのビルド
+RUN npm install
 RUN npx tailwindcss -i src/main/resources/static/css/input.css -o src/main/resources/static/css/tailwind.css
 
 
