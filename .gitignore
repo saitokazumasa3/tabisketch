@@ -37,3 +37,8 @@ build/
 
 ### Tailwind CSS ###
 **/src/main/**/css/tailwind.css
+
+
+### dot env file ###
+.env*
+!/.env.example

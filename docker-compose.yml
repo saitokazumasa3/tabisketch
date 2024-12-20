@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - postgresql
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+
+  postgresql:
+    image: postgres:16
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./.run:/docker-entrypoint-initdb.d/.run
+    env_file:
+      - .env
+    restart: always
+
+networks:
+  tabisketch:
