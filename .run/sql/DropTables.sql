@@ -1,0 +1,11 @@
+\i .run/sql/drop/DropPackingsTable.sql
+\i .run/sql/drop/DropPlacesTable.sql
+\i .run/sql/drop/DropTransportationsTable.sql
+\i .run/sql/drop/DropGoogleTypeAssociationsTable.sql
+\i .run/sql/drop/DropGooglePlaceTypesTable.sql
+\i .run/sql/drop/DropGooglePlacesTable.sql
+\i .run/sql/drop/DropDaysTable.sql
+\i .run/sql/drop/DropPlansTable.sql
+\i .run/sql/drop/DropMAATokensTable.sql
+\i .run/sql/drop/DropPasswordResetTokensTable.sql
+\i .run/sql/drop/DropUsersTable.sql

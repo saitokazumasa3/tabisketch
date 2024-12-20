@@ -29,7 +29,7 @@ public interface IPlansMapper {
     Plan selectByUUID(final UUID uuid);
 
     @Update("UPDATE plans " +
-            "   SET title = #{title}, is_editable = #{isEditable}, is_public = #{isPublic} " +
+            "   SET title = #{title}, editable = #{editable}, public_accessible = #{publicAccessible} " +
             "   WHERE id = #{id}")
     int update(final Plan plan);
 

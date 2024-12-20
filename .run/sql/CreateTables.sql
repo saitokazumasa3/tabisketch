@@ -1,0 +1,11 @@
+\i .run/sql/create/CreateUsersTable.sql
+\i .run/sql/create/CreatePasswordResetTokensTable.sql
+\i .run/sql/create/CreateMAATokensTable.sql
+\i .run/sql/create/CreatePlansTable.sql
+\i .run/sql/create/CreateDaysTable.sql
+\i .run/sql/create/CreateGooglePlacesTable.sql
+\i .run/sql/create/CreateGooglePlaceTypesTable.sql
+\i .run/sql/create/CreateGoogleTypeAssociationsTable.sql
+\i .run/sql/create/CreateTransportationsType.sql
+\i .run/sql/create/CreatePlacesTable.sql
+\i .run/sql/create/CreatePackingsTable.sql

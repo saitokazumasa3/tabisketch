@@ -1,0 +1,65 @@
+name: Build And Run
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+  MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+  MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+  GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+          architecture: x64
+          cache: maven
+
+      - name: Initialize database
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGDATABASE: ${{ env.POSTGRES_DB }}
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        run: .run/bin/CreateTables.sh ${{ env.POSTGRES_USER }} ${{ env.POSTGRES_PASSWORD }} ${{ env.POSTGRES_DB }}
+
+      - name: Build with Maven
+        env:
+          DATABASE_URL: "jdbc:postgresql://localhost:5432/${{ env.POSTGRES_DB }}"
+          DATABASE_USERNAME: ${{ env.POSTGRES_USER }}
+          DATABASE_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          MAIL_USERNAME: ${{ env.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ env.MAIL_PASSWORD }}
+          GOOGLE_MAPS_API_KEY: ${{ env.GOOGLE_MAPS_API_KEY }}
+        run: ./mvnw package

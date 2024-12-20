@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS plans
     title            VARCHAR(64) NOT NULL,
     user_id          INT         NOT NULL REFERENCES users (id),
     editable         BOOLEAN     NOT NULL DEFAULT TRUE,
-    publicAccessible BOOLEAN     NOT NULL DEFAULT FALSE
+    public_accessible BOOLEAN     NOT NULL DEFAULT FALSE
 );
