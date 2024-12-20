@@ -8,14 +8,12 @@ COPY package-lock.json .
 RUN npm install
 RUN npx tailwindcss -i src/main/resources/static/css/input.css -o src/main/resources/static/css/tailwind.css
 
-
 # Spring Bootアプリケーションのビルドステージ
 FROM maven:3.9.9-eclipse-temurin-22 AS spring-boot-build
 WORKDIR /app
 COPY pom.xml .
 COPY --from=tailwindcss-build /app/src ./src
 RUN mvn package -DskipTests
-
 
 # アプリケーション実行ステージ
 FROM eclipse-temurin:22-jdk AS app-runtime
