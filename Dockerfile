@@ -6,7 +6,6 @@ COPY tailwind.config.js .
 COPY package.json .
 COPY package-lock.json .
 # TailwindCSSのビルド
-RUN npm install
 RUN npx tailwindcss -i src/main/resources/static/css/input.css -o src/main/resources/static/css/tailwind.css
 
 
@@ -19,17 +18,18 @@ COPY --from=tailwindcss-build /app/src ./src
 RUN mvn package -DskipTests
 
 
-# アプリケーション実行
+# アプリケーション実行ステージ
 FROM eclipse-temurin:22-jdk AS app-runtime
 WORKDIR /app
 COPY --from=spring-boot-build /app/target/tabisketch-0.0.1-SNAPSHOT.jar /app/app.jar
-# 環境変数の設定
+# 環境変数を受け取る
 ARG _DATABASE_URL
 ARG _DATABASE_USERNAME
 ARG _DATABASE_PASSWORD
 ARG _GOOGLE_MAPS_API_KEY
 ARG _MAIL_PASSWORD
 ARG _MAIL_USERNAME
+# 環境変数を設定する
 ENV DATABASE_URL=${_DATABASE_URL}
 ENV DATABASE_USERNAME=${_DATABASE_USERNAME}
 ENV DATABASE_PASSWORD=${_DATABASE_PASSWORD}
