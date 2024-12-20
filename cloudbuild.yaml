@@ -50,7 +50,7 @@ steps:
       '--no-cpu-throttling'
     ]
 
-# Secret Managerから取得する環境変数
+# Secret Managerから環境変数を取得
 availableSecrets:
   secretManager:
     - versionName: projects/207428784039/secrets/DATABASE_URL/versions/latest
