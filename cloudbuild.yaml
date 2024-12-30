@@ -41,9 +41,9 @@ steps:
       '--region',
       'asia-northeast1',
       '--add-cloudsql-instances',
-      '$PROJECT_ID:us-central1:tabisketch',
+      '$PROJECT_ID:us-northeast1:tabisketch',
       '--vpc-connector',
-      'tabisketch-connector',
+      'tabisketch-vpc-connector',
       '--vpc-egress',
       'all',
       '--allow-unauthenticated',
@@ -53,17 +53,17 @@ steps:
 # Secret Managerから環境変数を取得
 availableSecrets:
   secretManager:
-    - versionName: projects/207428784039/secrets/DATABASE_URL/versions/latest
+    - versionName: projects/499665473392/secrets/DATABASE_URL/versions/latest
       env: 'DATABASE_URL'
-    - versionName: projects/207428784039/secrets/DATABASE_USERNAME/versions/latest
+    - versionName: projects/499665473392/secrets/DATABASE_USERNAME/versions/latest
       env: 'DATABASE_USERNAME'
-    - versionName: projects/207428784039/secrets/DATABASE_PASSWORD/versions/latest
+    - versionName: projects/499665473392/secrets/DATABASE_PASSWORD/versions/latest
       env: 'DATABASE_PASSWORD'
-    - versionName: projects/207428784039/secrets/GOOGLE_MAPS_API_KEY/versions/latest
+    - versionName: projects/499665473392/secrets/GOOGLE_MAPS_API_KEY/versions/latest
       env: 'GOOGLE_MAPS_API_KEY'
-    - versionName: projects/207428784039/secrets/MAIL_PASSWORD/versions/latest
+    - versionName: projects/499665473392/secrets/MAIL_PASSWORD/versions/latest
       env: 'MAIL_PASSWORD'
-    - versionName: projects/207428784039/secrets/MAIL_USERNAME/versions/latest
+    - versionName: projects/499665473392/secrets/MAIL_USERNAME/versions/latest
       env: 'MAIL_USERNAME'
 
 images:
