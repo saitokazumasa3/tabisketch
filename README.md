@@ -45,3 +45,9 @@ GOOGLE_MAPS_API_KEY GoogleMapのAPIキー
 #### テーブル一括削除
 
 `.run/bin/DropTables.sh [PostgreSQLのユーザー名] [PostgreSQLのパスワード] tabisketch`
+
+#### PlaywrightによるE2Eテストの実行
+
+```bash
+npm run e2e
+```
