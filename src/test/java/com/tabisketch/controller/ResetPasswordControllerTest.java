@@ -1,19 +1,21 @@
 package com.tabisketch.controller;
 
+import com.tabisketch.bean.form.ResetPasswordForm;
+import com.tabisketch.service.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import java.util.UUID;
 
-@WebMvcTest(controllers = ResetPasswordController.class)
+@WebMvcTest(ResetPasswordController.class)
 public class ResetPasswordControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -21,33 +23,53 @@ public class ResetPasswordControllerTest {
     private ResetPasswordService resetPasswordService;
 
     @Test
-    void パスワードリセットメール送信に成功するとリダイレクトされる() throws Exception {
-        String email = "user@example.com";
-
-        mockMvc.perform(post("/password-reset/send")
-                        .param("email", email))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/password-reset/send"));
-
-        verify(resetPasswordService).sendResetPasswordEmail(email);
+    public void testGetResetPasswordRequestForm() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/user/reset-password"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("resetPasswordForm"))
+                .andExpect(MockMvcResultMatchers.view().name("user/reset-password/request"));
     }
 
     @Test
-    @WithMockUser(username = "sample@example.com", password = "$2a$10$G7Emd1ALL6ibttkgRZtBZeX6Qps6lgEGKq.njouwtiuE4uvjD2YMO")
-    void パスワードフォーム送信時にリダイレクトされる() throws Exception {
-        final var resetPasswordForm = new ResetPasswordForm(
-                currentUserMailAddress(),
-                "password",
-                "password2"
-        );
+    public void testPostResetPasswordRequest() throws Exception {
+        final String email = "sample@example.com";
+        final ResetPasswordForm form = new ResetPasswordForm();
+        form.setEmail(email);
 
-        mockMvc.perform(post("/user/edit/password")
-                        .flashAttr("resetPasswordForm", resetPasswordForm))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/edit/password/confirm"));
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/user/reset-password")
+                        .flashAttr("resetPasswordForm", form)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("message", "リセットリンクがメールで送信されました。"))
+                .andExpect(MockMvcResultMatchers.view().name("user/reset-password/send"));
     }
 
-    private static String currentUserMailAddress() {
-        return "sample@example.com";
+    @Test
+    public void testGetResetPasswordForm() throws Exception {
+        final UUID token = UUID.randomUUID();
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/user/reset-password/" + token))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("resetPasswordForm"))
+                .andExpect(MockMvcResultMatchers.model().attribute("token", token.toString()))
+                .andExpect(MockMvcResultMatchers.view().name("user/reset-password/form"));
+    }
+
+    @Test
+    public void testPostResetPassword() throws Exception {
+        final UUID token = UUID.randomUUID();
+        final ResetPasswordForm form = new ResetPasswordForm();
+        form.setEmail("sample@example.com");
+        form.setNewPassword("password");
+        form.setConfirmPassword("password");
+
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/user/reset-password/" + token)
+                        .flashAttr("resetPasswordForm", form)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/login"));
     }
 }
