@@ -1,6 +1,6 @@
 package com.tabisketch.mapper;
 
-import com.tabisketch.bean.entity.PasswordResetToken;
+import com.tabisketch.bean.entity.ResetPasswordToken;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
