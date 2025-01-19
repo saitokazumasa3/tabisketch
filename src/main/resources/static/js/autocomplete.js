@@ -75,7 +75,7 @@ class AutoCompleteList {
 const initInstanceKeys = [
     'startPlace',
     'endPlace',
-    'place1'
+    'place0'
 ];
 
 const autoCompleteList = new AutoCompleteList();
