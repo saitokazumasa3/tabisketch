@@ -53,3 +53,18 @@ TailwindCSSも同時にビルドされる
 ```shell
 ./bin/DropTable.sh
 ```
+
+### docker compose 環境のビルド
+```shell
+npm run docker:build
+```
+
+### docker compose 環境の起動
+```shell
+npm run docker:up
+```
+
+### docker compose 環境の破棄
+```shell
+npm run docker:down
+```
