@@ -5,7 +5,9 @@ steps:
     args: [
       '-c',
       'docker build -t gcr.io/$PROJECT_ID/tabisketch:$COMMIT_SHA . 
-        --build-arg _DATABASE_URL=$$DATABASE_URL
+        --build-arg _DATABASE_URL=$$DATABASE_HOST
+        --build-arg _DATABASE_PORT=$$DATABASE_PORT
+        --build-arg _DATABASE_NAME=$$DATABASE_NAME
         --build-arg _DATABASE_USERNAME=$$DATABASE_USERNAME 
         --build-arg _DATABASE_PASSWORD=$$DATABASE_PASSWORD
         --build-arg _GOOGLE_MAPS_API_KEY=$$GOOGLE_MAPS_API_KEY
@@ -53,8 +55,13 @@ steps:
 # Secret Managerから環境変数を取得
 availableSecrets:
   secretManager:
-    - versionName: projects/499665473392/secrets/DATABASE_URL/versions/latest
-      env: 'DATABASE_URL'
+    - versionName: projects/499665473392/secrets/DATABASE_HOST/versions/latest
+      env: 'DATABASE_HOST'
+    - versionNme: projects/499665473392/secrets/DATABASE_PORT/versions/latest
+      env: 'DATABASE_PORT'
+    - versionNme: projects/499665473392/secrets/DATABASE_NAME/versions/latest
+      env: 'DATABASE_NAME'
+
     - versionName: projects/499665473392/secrets/DATABASE_USERNAME/versions/latest
       env: 'DATABASE_USERNAME'
     - versionName: projects/499665473392/secrets/DATABASE_PASSWORD/versions/latest
