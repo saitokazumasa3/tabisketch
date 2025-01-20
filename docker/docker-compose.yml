@@ -1,0 +1,14 @@
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.env
+    volumes:
+      - ./postgresql/sql:/docker-entrypoint-initdb.d
+    restart: always
+
+networks:
+  tabisketch:

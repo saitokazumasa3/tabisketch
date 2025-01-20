@@ -16,6 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @WebMvcTest(UpdatePlaceAPIController.class)
 public class UpdatePlaceAPIControllerTest {
     @Autowired
@@ -23,13 +26,20 @@ public class UpdatePlaceAPIControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockitoBean
-    private IUpdatePlaceService __; // DIで使用
+    private IUpdatePlaceService updatePlaceService;
 
     @Test
     @WithMockUser
     public void testPost() throws Exception {
+        final int placeId = 1;
+        when(this.updatePlaceService.execute(any())).thenReturn(placeId);
+
         final var updatePlaceForm = new UpdatePlaceForm(
-                1,
+                placeId,
+                "name",
+                "googlePlaceId",
+                0,
+                0,
                 1,
                 0,
                 LocalTime.of(10, 0),
@@ -40,7 +50,7 @@ public class UpdatePlaceAPIControllerTest {
                 null,
                 null
         );
-        final String responseJson = this.objectMapper.writeValueAsString(UpdatePlaceResponse.success());
+        final String responseJson = this.objectMapper.writeValueAsString(UpdatePlaceResponse.success(placeId));
 
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/update-place")

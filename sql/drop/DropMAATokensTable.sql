@@ -1,1 +1,0 @@
-DROP TABLE IF EXISTS maa_tokens;

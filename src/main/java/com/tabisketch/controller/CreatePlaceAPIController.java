@@ -1,5 +1,6 @@
 package com.tabisketch.controller;
 
+import com.tabisketch.bean.entity.Place;
 import com.tabisketch.bean.form.CreatePlaceForm;
 import com.tabisketch.bean.response.CreatePlaceResponse;
 import com.tabisketch.exception.InsertFailedException;
@@ -26,7 +27,7 @@ public class CreatePlaceAPIController {
     ) throws InsertFailedException {
         if (bindingResult.hasErrors()) return CreatePlaceResponse.failed();
 
-        this.createPlaceService.execute(createPlaceForm);
-        return CreatePlaceResponse.success();
+        final int placeId = this.createPlaceService.execute(createPlaceForm);
+        return CreatePlaceResponse.success(placeId);
     }
 }
