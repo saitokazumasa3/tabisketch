@@ -58,6 +58,25 @@ class AutoComplete {
             document.getElementById('endLng').value = place.geometry.location.lng();
             return;
         }
+        if (this.#inputElement.id === updateInstanceKeys[0]) {
+            document.getElementById('startUpdatePlaceId').value = place.place_id;
+            document.getElementById('startUpdateLat').value = place.geometry.location.lat();
+            document.getElementById('startUpdateLng').value = place.geometry.location.lng();
+            return;
+        }
+        if (this.#inputElement.id === updateInstanceKeys[1]) {
+            document.getElementById('endUpdatePlaceId').value = place.place_id;
+            document.getElementById('endUpdateLat').value = place.geometry.location.lat();
+            document.getElementById('endUpdateLng').value = place.geometry.location.lng();
+            return;
+        }
+        // updatePlaceで始まるもの
+        if (this.#inputElement.id.startsWith(updateInstanceKeys[2])) {
+            document.getElementById('placeUpdatePlaceId').value = place.place_id;
+            document.getElementById('placeUpdateLat').value = place.geometry.location.lat();
+            document.getElementById('placeUpdateLng').value = place.geometry.location.lat();
+            return;
+        }
         document.getElementById(`placeId${placeNum.value()}`).value = place.place_id;
         document.getElementById(`placeLat${placeNum.value()}`).value = place.geometry.location.lat();
         document.getElementById(`placeLng${placeNum.value()}`).value = place.geometry.location.lng();
@@ -75,7 +94,13 @@ class AutoCompleteList {
 const initInstanceKeys = [
     'startPlace',
     'endPlace',
-    'place1'
+    'place0',
+];
+
+const updateInstanceKeys = [
+    'startUpdatePlace',
+    'endUpdatePlace',
+    'updatePlace'
 ];
 
 const autoCompleteList = new AutoCompleteList();
