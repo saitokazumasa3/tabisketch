@@ -1,8 +1,6 @@
 package com.tabisketch.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tabisketch.bean.form.ExampleDeletePlaceForm;
-import com.tabisketch.bean.response.implement.DeletePlaceResponse;
+import com.tabisketch.bean.entity.ExamplePlace;
 import com.tabisketch.service.IDeletePlaceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +16,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class DeletePlaceAPIControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockitoBean
     private IDeletePlaceService __; // DIで使用
 
     @Test
     @WithMockUser
     public void testPost() throws Exception {
-        final var deletePlaceForm = ExampleDeletePlaceForm.generate();
-        final String responseJson = this.objectMapper.writeValueAsString(DeletePlaceResponse.success());
-
+        final int id = ExamplePlace.generate().getId();
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/delete-place")
-                        .flashAttr("deletePlaceForm", deletePlaceForm)
+                        .post("/api/delete-place/" + id)
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
-                ).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(responseJson));
+                ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

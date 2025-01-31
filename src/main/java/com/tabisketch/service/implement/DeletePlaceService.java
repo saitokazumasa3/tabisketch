@@ -1,7 +1,6 @@
 package com.tabisketch.service.implement;
 
 import com.tabisketch.bean.entity.Place;
-import com.tabisketch.bean.form.DeletePlaceForm;
 import com.tabisketch.exception.DeleteFailedException;
 import com.tabisketch.mapper.IPlacesMapper;
 import com.tabisketch.service.IDeletePlaceService;
@@ -16,8 +15,8 @@ public class DeletePlaceService implements IDeletePlaceService {
     }
 
     @Override
-    public void execute(final DeletePlaceForm deletePlaceForm) throws DeleteFailedException {
-        final int deletePlaceResult = this.placesMapper.deleteById(deletePlaceForm.getPlaceId());
+    public void execute(final int id) throws DeleteFailedException {
+        final int deletePlaceResult = this.placesMapper.deleteById(id);
         if (deletePlaceResult != 1) throw new DeleteFailedException(Place.class.getName());
     }
 }

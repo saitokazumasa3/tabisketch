@@ -1,6 +1,6 @@
 package com.tabisketch.service;
 
-import com.tabisketch.bean.form.ExampleDeletePlaceForm;
+import com.tabisketch.bean.entity.ExamplePlace;
 import com.tabisketch.exception.DeleteFailedException;
 import com.tabisketch.mapper.IPlacesMapper;
 import org.junit.jupiter.api.Test;
@@ -23,8 +23,8 @@ public class DeletePlaceServiceTest {
     public void testExecute() throws DeleteFailedException {
         when(this.placesMapper.deleteById(anyInt())).thenReturn(1);
 
-        final var deletePlaceForm = ExampleDeletePlaceForm.generate();
-        this.deletePlaceService.execute(deletePlaceForm);
+        final int id = ExamplePlace.generate().getId();
+        this.deletePlaceService.execute(id);
 
         verify(this.placesMapper).deleteById(anyInt());
     }
