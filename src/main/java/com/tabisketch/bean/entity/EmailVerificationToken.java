@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/** パスワードリセットトークン */
+/** メールアドレス認証トークン */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PasswordResetToken {
+public class EmailVerificationToken {
     /** 識別子文字列 */
     private UUID uuid;
-    /** 作成日 */
+    /** 作成日時 */
     private LocalDateTime createdAt;
     /** 関連する「ユーザー」の識別子 */
     private int userId;
