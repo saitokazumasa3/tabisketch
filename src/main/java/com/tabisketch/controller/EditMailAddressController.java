@@ -50,8 +50,7 @@ public class EditMailAddressController {
 
     @GetMapping("/send")
     public String send(final Model model) {
-        if (!model.containsAttribute("mailAddress"))
-            model.addAttribute("mailAddress", "");
+        if (!model.containsAttribute("mailAddress")) return "user/edit/mail/index";
 
         return "user/edit/mail/send";
     }

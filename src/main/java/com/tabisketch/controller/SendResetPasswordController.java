@@ -46,8 +46,7 @@ public class SendResetPasswordController {
 
     @GetMapping("/send")
     public String send(final Model model) {
-        if (!model.containsAttribute("mailAddress"))
-            model.addAttribute("mailAddress", "");
+        if (!model.containsAttribute("mailAddress")) return "password-reset/index";
 
         return "password-reset/send";
     }

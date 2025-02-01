@@ -5,6 +5,7 @@ import com.tabisketch.exception.InsertFailedException;
 import com.tabisketch.exception.InvalidMailAddressException;
 import com.tabisketch.service.IRegisterService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,8 @@ public class RegisterController {
     }
 
     @GetMapping
-    public String get(final Model model) {
+    public String get(final Model model, final HttpSession session) {
+        session.invalidate();
         model.addAttribute("registerForm", RegisterForm.empty());
         return "register/index";
     }
@@ -45,8 +47,7 @@ public class RegisterController {
 
     @GetMapping("/send")
     public String send(final Model model) {
-        if (!model.containsAttribute("mailAddress"))
-            model.addAttribute("mailAddress", "");
+        if (!model.containsAttribute("mailAddress")) return "register/index";
 
         return "register/send";
     }
